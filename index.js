@@ -53,31 +53,35 @@ const questions = [
     },
     {
       type: 'checkbox',
-      name: 'licensing',
+      name: 'license',
       message: 'What kind of license should your project have?',
-      choices: ['GNU AGPLv3', 'GNU GPLv3', 'GNU LGPLv3', 'Mozilla Public License 2.0', 'Apache License 2.0', 'MIT License', 'Boost Software License 1.0', 'The Unlicense'],
+      choices: ['Apache License 2.0', 'GNU GPLv3', 'MIT License'],
     }
   ];
 
-inquirer
-    .prompt(questions)
-    .then((response) => {
-        writeToFile('README.md',generateMarkdown({...response}));
-    }
-        
 
-    );
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    return fs.writeFile('generateMarkdown.js','utf8', (error, genMd) =>
-        error ? console.error(error) : console.log(data)
+    return fs.writeFile(fileName,data, (error) =>
+        error ? console.error("Error: " + error) : console.log("data")
     );
 }
 
 // TODO: Create a function to initialize app
-async function init() {
-    
+function init() {
+var OutputReadme = "";
+inquirer
+    .prompt(questions)
+    .then((response) => {
+        console.log(". . . Generating ReadMe . . .")
+        OutputReadme = generateMarkdown(response);
+        if (OutputReadme.length > 0) writeToFile('ReadmeEx.md', OutputReadme)
+        else console.log(generateMarkdown(response));
+    }
+        
+
+    );    
 }
 // Function call to initialize app
 init();
